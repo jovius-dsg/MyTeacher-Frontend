@@ -1,0 +1,81 @@
+import { Button, Dialog, DialogActions, Grid, Snackbar, TextField } from '@mui/material'
+import { useIndex } from '../src/hooks/pages/useIndex'
+import { Box } from '@mui/system'
+import type { NextPage } from 'next'
+import Cabecalho from '../src/components/Cabecalho/Cabecalho'
+import Lista from '../src/components/Lista/Lista'
+import { Professor } from '../src/@types/professor'
+import { Descricao, Foto, Info, ItemLista, ListaStyled, Nome, Valor } from '../src/components/Lista/Lista.style'
+
+const Home: NextPage = () => {
+
+  const { 
+    listaProfessores,
+    nome, 
+    setNome, 
+    email, 
+    setEmail,
+    professorSelecionado,
+    setprofessorSelecionado,
+    marcarAula,
+    mensagem,
+    setMensagem
+  } = useIndex();
+
+  return (
+    <div>
+      <Box sx={{ backgroundColor: 'secondary.main' }}>
+        <Lista 
+          professores={ listaProfessores }
+          onSelect={(professor) => setprofessorSelecionado(professor)}
+
+        ></Lista>
+      </Box>
+
+      <Dialog onClose={ () => setprofessorSelecionado(null) } open={professorSelecionado !== null} fullWidth PaperProps={{sx: {p:5}}}>
+        <Grid container spacing={2}>
+
+          <Grid item xs={12}>
+            <TextField 
+              label="Digite seu nome"
+              type="text"
+              fullWidth
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField 
+              label="Digite seu email"
+              type="email"
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            
+            />
+          </Grid>
+          
+        </Grid>
+
+        <DialogActions sx={{mt: 5}}>
+
+          <Button onClick={ () => setprofessorSelecionado(null) }>Cancelar</Button>
+          <Button onClick={ () => marcarAula() }>Marcar</Button>
+
+        </DialogActions>
+
+      </Dialog>
+
+      <Snackbar 
+        message={mensagem} 
+        open={mensagem.length > 0} 
+        autoHideDuration={3000}
+        onClose={() => setMensagem('')}
+      />
+    </div>
+  )
+}
+
+export default Home
